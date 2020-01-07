@@ -4,15 +4,20 @@ using UnityEngine;
 
 public class translateMe : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public float Q;
+
+    public void Slider_Change(float f)
     {
-        
+        Q = f;
     }
 
-    // Update is called once per frame
+    void Start()
+    {
+        transform.localPosition = new Vector3(0, -1f, 0);
+    }
+
     void Update()
     {
-        
+        transform.localPosition = new Vector3(0, -Q, 0);
     }
 }

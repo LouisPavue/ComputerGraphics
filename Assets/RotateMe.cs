@@ -10,10 +10,11 @@ public class RotateMe : MonoBehaviour
 
     public int ObjectNumber;
 	public float Q;
-    private Matrix4x4 _initialTransform;
+    private static Matrix4x4 _initialTransform;
 	
 	public void Slider_Change(float f)
     {
+
 		Q = f;
     }
 	
@@ -43,6 +44,12 @@ public class RotateMe : MonoBehaviour
         //transform.localScale = GetScale(ref matrix);
     }
 
+    public static void ApplyTranslation(Transform transform, Matrix4x4 matrix)
+    {
+        transform.localPosition = GetTranslation(ref matrix);
+       
+    }
+
     // Matrice de Rotation axe Y
     public static Matrix4x4 GetT0(float q0)
     {
@@ -65,10 +72,56 @@ public class RotateMe : MonoBehaviour
         );
     }
 
+    // Matrice de Rotation axe X
+    public static Matrix4x4 GetT2(float q1)
+    {
+        return new Matrix4x4(
+            new Vector4(1, 0, 0, 0),
+            new Vector4(0, Mathf.Cos(q1), -Mathf.Sin(q1), 0),
+            new Vector4(0, Mathf.Sin(q1), Mathf.Cos(q1), 0),
+            new Vector4(0, 0, 0, 1)
+        );
+    }
+
+    public static Matrix4x4 TranslateX(float q)
+    {
+        return new Matrix4x4(
+            new Vector4(1, 0, 0, _initialTransform.GetColumn(3)[0] + q),
+            new Vector4(0, 1, 0, _initialTransform.GetColumn(3)[1]),
+            new Vector4(0, 0, 1, _initialTransform.GetColumn(3)[2]),
+            new Vector4(0, 0, 0, 1)
+        );
+    }
+
+    public static Matrix4x4 TranslateY(float q)
+    {
+        return new Matrix4x4(
+            new Vector4(1, 0, 0, 0),
+            new Vector4(0, 1, 0, q),
+            new Vector4(0, 0, 1, 0),
+            new Vector4(0, 0, 0, 1)
+        );
+    }
+
+    public static Matrix4x4 TranslateZ(float q)
+    {
+        return new Matrix4x4(
+            new Vector4(1, 0, 0, 0),
+            new Vector4(0, 1, 0, 0),
+            new Vector4(0, 0, 1, q),
+            new Vector4(0, 0, 0, 1)
+        );
+    }
+
     // Start is called before the first frame update
     void Start()
     {
+
         _initialTransform = Matrix4x4.Rotate(Quaternion.Euler(0.0f, 0.0f, 0.0f));
+
+        
+
+
     }
 
     // Update is called once per frame
@@ -83,9 +136,21 @@ public class RotateMe : MonoBehaviour
                 ApplyMatrix(transform, _initialTransform * GetT0(Q * Mathf.Deg2Rad));
                 break;
             case 2:
-                ApplyMatrix(transform, _initialTransform * GetT1(Q * Mathf.Deg2Rad));
+                ApplyMatrix(transform, _initialTransform * GetT0(Q * Mathf.Deg2Rad));
                 break;
+            case 3:
+                ApplyMatrix(transform, _initialTransform * GetT0(Q * Mathf.Deg2Rad));
+                break;
+            case 4:
+                ApplyMatrix(transform, _initialTransform * GetT0(Q * Mathf.Deg2Rad));
+                break;
+            case 5:
+                ApplyMatrix(transform, _initialTransform * GetT0(Q * Mathf.Deg2Rad));
+                //ApplyTranslation(transform, _initialTransform * TranslateX(Q));
+                break;
+            
         }
-        
+
+
     }
 }

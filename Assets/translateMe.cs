@@ -19,5 +19,6 @@ public class translateMe : MonoBehaviour
     void Update()
     {
         transform.localPosition = new Vector3(0, -Q, 0);
+        
     }
 }
